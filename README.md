@@ -6,3 +6,5 @@ Programming projects that I am doing at Nova Scotia Community College during the
 - [Project 1](/PROG1700/project1) `Python`
 - [Project 2](/PROG1700/project2) `Python`
 - [Project 3](/PROG1700/project3) `Python`
+- [Project 4](/PROG1700/project4) `Python`
+
