@@ -1,0 +1,150 @@
+CREATE DATABASE [IF NOT EXISTS] CHARTERINC;
+
+    CREATE TABLE IF NOT EXISTS EMPLOYEE (
+        EMP_NUM INT,
+        EMP_TITLE NVARCHAR,
+        EMP_LNAME NVARCHAR,
+        EMP_FNAME NVARCHAR,
+        EMP_INITIAL NVARCHAR,
+        EMP_DOB DATETIME,
+        EMP_HIRE_DATE DATETIME,
+        PRIMARY KEY (EMP_NUM)
+        );
+
+    CREATE TABLE IF NOT EXISTS MODEL (
+        MOD_CODE NVARCHAR,
+        MOD_MANUFACTURER NVARCHAR,
+        MOD_NAME NVARCHAR,
+        MOD_SEATS INT,
+        MOD_CHG_MILE FLOAT,
+        PRIMARY KEY (MOD_CODE)
+    );
+
+    CREATE TABLE IF NOT EXISTS CUSTOMER (
+        CUS_CODE INT,
+        CUS_LNAME NVARCHAR,
+        CUS_FNAME NVARCHAR,
+        CUS_INITIAL NVARCHAR,
+        CUS_AREACODE NVARCHAR,
+        CUS_PHONE NVARCHAR,
+        CUS_BALANCE FLOAT,
+        PRIMARY KEY (CUS_CODE)
+    );
+
+    CREATE TABLE IF NOT EXISTS CREW (
+        CHAR_TRIP INT,
+        EMP_NUM INT,
+        CREW_JOB NVARCHAR,
+        PRIMARY KEY (CHAR_TRIP),
+        PRIMARY KEY (EMP_NUM),
+        FOREIGN KEY (EMP_NUM) REFERENCES EMPLOYEE(EMP_NUM)
+    );
+
+    CREATE TABLE IF NOT EXISTS CHARTER (
+        CHAR_TRIP INT,
+        CHAR_DATE DATETIME,
+        AC_NUMBER NVARCHAR,
+        CHAR_DESTINATION NVARCHAR,
+        CHAR_DISTANCE NVARCHAR,
+        CHAR_HOURS_FLOWN FLOAT,
+        CHAR_HOURS_WAIT FLOAT,
+        CHAR_FUEL_GALLONS FLOAT,
+        CHAR_OIL_QTS INT,
+        CUS_CODE INT,
+        PRIMARY KEY (CHAR_TRIP),
+        FOREIGN KEY (CHAR_TRIP) REFERENCES CREW(CHAR_TRIP),
+        FOREIGN KEY (AC_NUMBER) REFERENCES AIRCRAFT(AC_NUMBER),
+        FOREIGN KEY (CUS_CODE) REFERENCES CUSTOMER(CUS_CODE)
+    );
+
+    CREATE TABLE IF NOT EXISTS AIRCRAFT (
+        AC_NUMBER NVARCHAR,
+        MOD_CODE NVARCHAR,
+        AC_TTAF FLOAT,
+        AC_TTEL FLOAT,
+        AC_TTER FLOAT,
+        PRIMARY KEY (AC_NUMBER),
+        FOREIGN KEY (MOD_CODE) REFERENCES MODEL(MOD_CODE)
+    );
+
+    INSERT INTO AIRCRAFT ("AC_NUMBER","MOD_CODE","AC_TTAF","AC_TTEL","AC_TTER") 
+        VALUES ("1484P","PA23-250",1833.10,1833.10,101.80),
+        ("2289L","C-90A",4243.80,768.90,1123.40),
+        ("2778V","PA31-350",7992.90,1513.10,789.50),
+        ("4278Y","PA31-350",2147.30,622.10,243.20);
+
+    INSERT INTO CHARTER ("CHAR_TRIP","CHAR_DATE","AC_NUMBER","CHAR_DESTINATION","CHAR_DISTANCE","CHAR_HOURS_FLOWN","CHAR_HOURS_WAIT","CHAR_FUEL_GALLONS","CHAR_OIL_QTS","CUS_CODE")
+        VALUES (10001,2016-2-5 0:00:00,"2289L","ATL",936.00,5.10,2.20,354.10,1,10011),
+        (10002,2016-2-5 0:00:00,"2778V","BNA",320.00,1.60,0.00,72.60,0,10016),
+        (10003,2016-2-5 0:00:00,"4278Y","GNV",1574.00,7.80,0.00,339.80,2,10014),
+        (10004,2016-2-6 0:00:00,"1484P","STL",472.00,2.90,4.90,97.20,1,10019),
+        (10005,2016-2-6 0:00:00,"2289L","ATL",1023.00,5.70,3.50,397.70,2,10011),
+        (10006,2016-2-6 0:00:00,"4278Y","STL",472.00,2.60,5.20,117.10,0,10017),
+        (10007,2016-2-6 0:00:00,"2778V","GNV",1574.00,7.90,0.00,348.40,2,10012),
+        (10008,2016-2-7 0:00:00,"1484P","TYS",644.00,4.10,0.00,140.60,1,10014),
+        (10009,2016-2-7 0:00:00,"2289L","GNV",1574.00,6.60,23.40,459.90,0,10017),
+        (10010,2016-2-7 0:00:00,"4278Y","ATL",998.00,6.20,3.20,279.70,0,10016),
+        (10011,2016-2-7 0:00:00,"1484P","BNA",352.00,1.90,5.30,66.40,1,10012),
+        (10012,2016-2-8 0:00:00,"2778V","MOB",884.00,4.80,4.20,215.10,0,10010),
+        (10013,2016-2-8 0:00:00,"4278Y","TYS",644.00,3.90,4.50,174.30,1,10011),
+        (10014,2016-2-9 0:00:00,"4278Y","ATL",936.00,6.10,2.10,302.60,0,10017),
+        (10015,2016-2-9 0:00:00,"2289L","GNV",1645.00,6.70,0.00,459.50,2,10016),
+        (10016,2016-2-9 0:00:00,"2778V","MQY",312.00,1.50,0.00,67.20,0,10011),
+        (10017,2016-2-10 0:00:00,"1484P","STL",508.00,3.10,0.00,105.50,0,10014),
+        (10018,2016-2-10 0:00:00,"4278Y","TYS",644.00,3.80,4.50,167.40,0,10017);
+
+    INSERT INTO CREW ("CHAR_TRIP","EMP_NUM","CREW_JOB")
+        VALUES (10001,104,"Pilot"),
+        (10002,101,"Pilot"),
+        (10003,105,"Pilot"),
+        (10003,109,"Copilot"),
+        (10004,106,"Pilot"),
+        (10005,101,"Pilot"),
+        (10006,109,"Pilot"),
+        (10007,104,"Pilot"),
+        (10007,105,"Copilot"),
+        (10008,106,"Pilot"),
+        (10009,105,"Pilot"),
+        (10010,108,"Pilot"),
+        (10011,101,"Pilot"),
+        (10011,104,"Copilot"),
+        (10012,101,"Pilot"),
+        (10013,105,"Pilot"),
+        (10014,106,"Pilot"),
+        (10015,101,"Copilot"),
+        (10015,104,"Pilot"),
+        (10016,105,"Copilot"),
+        (10016,109,"Pilot"),
+        (10017,101,"Pilot"),
+        (10018,104,"Copilot"),
+        (10018,105,"Pilot");
+
+    INSERT INTO CUSTOMER ("CUS_CODE","CUS_NAME","CUS_ADDRESS","CUS_CITY","CUS_STATE","CUS_ZIP")
+        VALUES (10010,"Ramas","Alfred","A","615","844-2573",0.00),
+        (10011,"Dunne","Leona","K","713","894-1238",0.00),
+        (10012,"Smith","Kathy","W","615","894-2285",896.54),
+        (10013,"Olowski","Paul","F","615","894-2180",1285.19),
+        (10014,"Orlando","Myron",,"615","222-1672",673.21),
+        (10015,"O'Brian","Amy","B","713","442-3381",1014.56),
+        (10016,"Brown","James","G","615","297-1228",0.00),
+        (10017,"Williams","George",,"615","290-2556",0.00),
+        (10018,"Farriss","Anne","G","713","382-7185",0.00),
+        (10019,"Smith","Olette","K","615","297-3809",453.98);
+
+    INSERT INTO EMPLOYEE ("EMP_NUM","EMP_NAME","EMP_ADDRESS","EMP_CITY","EMP_STATE","EMP_ZIP","EMP_PHONE","EMP_SALARY","EMP_SUPERVISOR")
+        VALUES (100,"Mr.","Kolmycz","George","D",1952-6-15 0:00:00,2007-3-15 0:00:00),
+        (101,"Ms.","Lewis","Rhonda","G",1975-3-19 0:00:00,2008-4-25 0:00:00),
+        (102,"Mr.","VanDam","Rhett",,1968-11-14 0:00:00,2012-12-20 0:00:00),
+        (103,"Ms.","Jones","Anne","M",1984-10-16 0:00:00,2015-8-28 0:00:00),
+        (104,"Mr.","Lange","John","P",1981-11-8 0:00:00,2006-10-20 0:00:00),
+        (105,"Mr.","Williams","Robert","D",1985-3-14 0:00:00,2015-1-8 0:00:00),
+        (106,"Mrs.","Duzak","Jeanine","K",1978-2-12 0:00:00,2011-1-5 0:00:00),
+        (107,"Mr.","Diante","Jorge","D",1984-8-21 0:00:00,2006-7-2 0:00:00),
+        (108,"Mr.","Wiesenbach","Paul","R",1976-2-14 0:00:00,2014-11-18 0:00:00),
+        (109,"Ms.","Travis","Elizabeth","K",1971-6-18 0:00:00,2011-4-14 0:00:00),
+        (110,"Mrs.","Genkazi","Leighla","W",1980-5-19 0:00:00,2012-12-1 0:00:00);
+
+    INSERT INTO MODEL ("MOD_CODE","MOD_MANUFACTURER","MOD_NAME","MOD_SEATS","MOD_CHG_MILE")
+        VALUES ("C-90A","Beechcraft","KingAir",8.00,2.67),
+        ("PA23-250","Piper","Aztec",6.00,1.93),
+        ("PA31-350","Piper","Navajo Chieftain",10.00,2.35);
